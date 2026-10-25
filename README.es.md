@@ -5,7 +5,7 @@
 [![Licencia: Apache-2.0](https://img.shields.io/badge/licencia-Apache--2.0-blue.svg)](LICENSE)
 [![Última versión](https://img.shields.io/github/v/release/William-De71/gladys-brevo?sort=semver)](https://github.com/William-De71/gladys-brevo/releases)
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-brevo/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-brevo/actions/workflows/release.yml)
-[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.0-2f6fb5)](https://gladysassistant.com)
+[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.3.0-2f6fb5)](https://gladysassistant.com)
 
 ![Brevo para Gladys Assistant](cover.jpg)
 
@@ -101,7 +101,7 @@ Ejemplos: _salta la alarma_ → SMS al vecino; _SMS no enviado por falta de cré
 
 ## Requisitos previos
 
-- Gladys Assistant 5.1.0 o posterior (widgets y escenas); las instancias más antiguas no pueden instalar la integración.
+- Gladys Assistant 5.3.0 o posterior (palabras clave y países del catálogo de Gladys 5.3, widgets y escenas); las instancias más antiguas no pueden instalar la integración.
 - Una cuenta de Brevo (plan gratuito: 300 emails al día), un remitente verificado o un dominio autenticado, créditos SMS para los SMS.
 - La dirección IP pública de la casa autorizada en Brevo (Seguridad → IP autorizadas) cuando la cuenta bloquea las direcciones desconocidas.
 

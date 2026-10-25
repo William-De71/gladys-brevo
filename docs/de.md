@@ -26,7 +26,7 @@ die Mobilfunkanbieter.
 
 ## Voraussetzungen
 
-- Gladys Assistant **5.1.0** oder neuer.
+- Gladys Assistant **5.3.0** oder neuer.
 - Ein **Brevo-Konto**. Der kostenlose Tarif sendet 300 E-Mails pro Tag; SMS
   werden als Guthaben gekauft (ein neues Konto hat keins).
 - Ein **E-Mail-Absender**: eine in Brevo bestätigte Adresse oder eine Adresse

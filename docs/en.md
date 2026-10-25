@@ -26,7 +26,7 @@ operators.
 
 ## Prerequisites
 
-- Gladys Assistant **5.1.0** or later.
+- Gladys Assistant **5.3.0** or later.
 - A **Brevo account**. The free plan sends 300 emails a day; SMS are bought as
   credits (a new account has none).
 - An **email sender**: an address verified in Brevo, or an address of a domain

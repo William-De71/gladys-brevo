@@ -26,7 +26,7 @@ et les opérateurs mobiles.
 
 ## Prérequis
 
-- Gladys Assistant **5.1.0** ou plus récent.
+- Gladys Assistant **5.3.0** ou plus récent.
 - Un **compte Brevo**. L’offre gratuite envoie 300 e-mails par jour ; les SMS
   s’achètent en crédits (un compte neuf n’en a pas).
 - Un **expéditeur e-mail** : une adresse vérifiée dans Brevo, ou une adresse

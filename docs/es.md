@@ -26,7 +26,7 @@ correo y los operadores móviles.
 
 ## Requisitos previos
 
-- Gladys Assistant **5.1.0** o posterior.
+- Gladys Assistant **5.3.0** o posterior.
 - Una **cuenta de Brevo**. El plan gratuito envía 300 emails al día; los SMS
   se compran como créditos (una cuenta nueva no tiene ninguno).
 - Un **remitente de email**: una dirección verificada en Brevo, o una
