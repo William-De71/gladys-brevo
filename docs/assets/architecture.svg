@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="320" viewBox="0 0 1000 320">
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#57606a"/></marker></defs>
+  <rect width="1000" height="320" fill="#ffffff"/>
+  <g font-family="DejaVu Sans, Arial, sans-serif" text-anchor="middle">
+    <rect x="20" y="70" width="210" height="160" rx="14" fill="#e8f1fb" stroke="#2f6fb5" stroke-width="2"/>
+    <text x="125" y="108" font-size="20" font-weight="bold" fill="#1f2328">Gladys Assistant</text>
+    <text x="125" y="138" font-size="14" fill="#57606a">notifications, scenes,</text>
+    <text x="125" y="158" font-size="14" fill="#57606a">dashboard widgets,</text>
+    <text x="125" y="178" font-size="14" fill="#57606a">address, number per user</text>
+    <rect x="320" y="70" width="210" height="160" rx="14" fill="#eef8f0" stroke="#1a7f37" stroke-width="2"/>
+    <text x="425" y="108" font-size="16" font-weight="bold" fill="#1f2328">gladys-brevo</text>
+    <text x="425" y="138" font-size="14" fill="#57606a">Docker container</text>
+    <text x="425" y="158" font-size="14" fill="#57606a">API key, HTTPS</text>
+    <text x="425" y="178" font-size="14" fill="#57606a">/data: counters,</text>
+    <text x="425" y="198" font-size="14" fill="#57606a">delivery status</text>
+    <rect x="620" y="70" width="190" height="160" rx="14" fill="#eef1fb" stroke="#3c4fbf" stroke-width="2"/>
+    <text x="715" y="108" font-size="20" font-weight="bold" fill="#1f2328">Brevo API v3</text>
+    <text x="715" y="138" font-size="14" fill="#57606a">api.brevo.com</text>
+    <text x="715" y="158" font-size="14" fill="#57606a">/smtp/email</text>
+    <text x="715" y="178" font-size="14" fill="#57606a">/transactionalSMS</text>
+    <text x="715" y="198" font-size="14" fill="#57606a">account, events</text>
+    <rect x="880" y="95" width="100" height="110" rx="14" fill="#fff7e6" stroke="#bf8700" stroke-width="2"/>
+    <text x="930" y="135" font-size="18" font-weight="bold" fill="#1f2328">Inboxes</text>
+    <text x="930" y="160" font-size="13" fill="#57606a">and</text>
+    <text x="930" y="178" font-size="13" fill="#57606a">phones</text>
+    <path d="M235 150 H315" stroke="#57606a" stroke-width="2" marker-start="url(#a)" marker-end="url(#a)"/>
+    <text x="275" y="130" font-size="12" fill="#57606a">REST</text>
+    <text x="275" y="175" font-size="12" fill="#57606a">+ WebSocket</text>
+    <text x="275" y="260" font-size="12" fill="#57606a">/api/integration/v1/*</text>
+    <path d="M535 150 H615" stroke="#57606a" stroke-width="2" marker-start="url(#a)" marker-end="url(#a)"/>
+    <text x="575" y="130" font-size="12" fill="#57606a">HTTPS</text>
+    <text x="575" y="175" font-size="12" fill="#57606a">api-key</text>
+    <path d="M815 150 H875" stroke="#57606a" stroke-width="2" marker-start="url(#a)" marker-end="url(#a)"/>
+    <text x="845" y="130" font-size="12" fill="#57606a">mail, SMS</text>
+    <text x="500" y="300" font-size="13" fill="#57606a">Cloud transport: the texts, images, addresses and numbers go through Brevo. Illustration.</text>
+  </g>
+</svg>

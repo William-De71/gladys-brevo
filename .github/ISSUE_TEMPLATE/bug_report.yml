@@ -1,0 +1,49 @@
+name: Bug report
+description: Something does not work as described in the documentation.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a problem. Never paste your Brevo API key (xkeysib-…): the logs of the integration do not contain it, but check before posting. Email addresses and phone numbers are masked in the logs.
+  - type: input
+    id: gladys-version
+    attributes:
+      label: Gladys version
+      description: Settings → System.
+      placeholder: '5.1.1'
+    validations:
+      required: true
+  - type: input
+    id: integration-version
+    attributes:
+      label: Integration version
+      description: Integrations → Brevo → Supervision tab.
+      placeholder: '0.1.0'
+    validations:
+      required: true
+  - type: input
+    id: account
+    attributes:
+      label: Brevo account
+      description: The plan (free, paid), the channels used (email, SMS, both) and whether the Authorized IPs blocking is on, as shown by "Test the connection". Never the API key.
+      placeholder: 'Free plan, email and SMS, IP blocking on'
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened, and what you expected
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        Logs of the integration (Settings → Supervision). In developer mode, add the environment variable `DEBUG=gladys-integration-sdk` for the SDK debug logs, reproduce, then copy the lines. Addresses and phone numbers are masked; hide the subjects and texts if you wish.
+      render: text

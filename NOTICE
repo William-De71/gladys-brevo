@@ -1,0 +1,10 @@
+Gladys Brevo integration
+Copyright 2026 William Deren
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+It calls the public Brevo API v3 as documented on https://developers.brevo.com.
+No code of the Brevo SDKs is included.
+
+Brevo is a trademark of Sendinblue SAS. This community integration is not
+affiliated with, endorsed or sponsored by Brevo.

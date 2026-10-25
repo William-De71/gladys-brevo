@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="534" viewBox="0 0 800 534">
+  <!-- Cover of the Brevo integration for Gladys Assistant (illustration, not
+       the Brevo logo). Built into cover.jpg by scripts/build-cover.sh. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1330"/>
+      <stop offset="1" stop-color="#16224f"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1d2b63"/>
+      <stop offset="1" stop-color="#121b44"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#4f7dff" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#4f7dff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="534" fill="url(#bg)"/>
+  <g stroke="#1c2a5c" stroke-width="1">
+    <path d="M0 89 H800 M0 178 H800 M0 267 H800 M0 356 H800 M0 445 H800"/>
+    <path d="M100 0 V534 M200 0 V534 M300 0 V534 M400 0 V534 M500 0 V534 M600 0 V534 M700 0 V534"/>
+  </g>
+
+  <!-- the home (Gladys), left -->
+  <g transform="translate(125 190)">
+    <path d="M-56 6 L0 -46 L56 6" fill="none" stroke="#58c98b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="-40" y="0" width="80" height="56" rx="8" fill="#16352c" stroke="#58c98b" stroke-width="6"/>
+    <rect x="-11" y="22" width="22" height="34" rx="3" fill="#58c98b"/>
+  </g>
+  <text x="125" y="290" fill="#9fe0bd" font-family="DejaVu Sans, Arial, sans-serif" font-size="20" text-anchor="middle">Gladys</text>
+
+  <!-- the cloud, middle -->
+  <circle cx="400" cy="180" r="150" fill="url(#glow)"/>
+  <path d="M322 222 H478 A44 44 0 0 0 470 135 A62 62 0 0 0 352 128 A48 48 0 0 0 322 222 Z" fill="#203173" stroke="#7d9bff" stroke-width="6" stroke-linejoin="round"/>
+  <text x="400" y="196" fill="#ffffff" font-family="DejaVu Sans, Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle">API</text>
+
+  <!-- links -->
+  <g fill="none" stroke-width="6" stroke-linecap="round">
+    <path d="M190 200 C 240 200, 260 190, 310 190" stroke="#58c98b" stroke-dasharray="2 14"/>
+    <path d="M492 190 C 540 190, 560 200, 600 200" stroke="#7d9bff" stroke-dasharray="2 14"/>
+  </g>
+
+  <!-- an email and a phone with an SMS, right -->
+  <g transform="translate(655 180)">
+    <rect x="-70" y="-62" width="120" height="84" rx="10" fill="#203173" stroke="#9db3ff" stroke-width="6"/>
+    <path d="M-64 -54 L-10 -12 L44 -54" fill="none" stroke="#9db3ff" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(712 222)">
+    <rect x="-34" y="-66" width="68" height="128" rx="12" fill="url(#screen)" stroke="#9db3ff" stroke-width="5"/>
+    <rect x="-12" y="-58" width="24" height="5" rx="2.5" fill="#9db3ff"/>
+    <path d="M-24 -38 H18 A6 6 0 0 1 24 -32 V-10 A6 6 0 0 1 18 -4 H-10 L-20 6 V-4 A6 6 0 0 1 -24 -10 V-32 A6 6 0 0 1 -18 -38 Z" fill="#58c98b"/>
+    <path d="M-16 -27 H16 M-16 -16 H6" stroke="#0e2a1f" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="16" cy="30" r="13" fill="#58c98b"/>
+    <path d="M9 30 L14 35 L23 25" fill="none" stroke="#0e2a1f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- title -->
+  <text x="400" y="400" fill="#ffffff" font-family="DejaVu Sans, Arial, sans-serif" font-size="58" font-weight="bold" text-anchor="middle">Brevo</text>
+  <text x="400" y="446" fill="#c8d3f0" font-family="DejaVu Sans, Arial, sans-serif" font-size="26" text-anchor="middle">for Gladys Assistant</text>
+  <text x="400" y="490" fill="#8090c0" font-family="DejaVu Sans, Arial, sans-serif" font-size="15" text-anchor="middle">Notifications by email and SMS · delivery tracking · scenes and widgets</text>
+</svg>

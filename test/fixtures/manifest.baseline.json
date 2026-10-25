@@ -1,0 +1,257 @@
+{
+  "_comment": "Keys users store, as published in 0.1.0. Never edit without a documented migration (see test/structure.test.js).",
+  "type": "communication",
+  "messaging": {
+    "receive": false
+  },
+  "config_schema": [
+    {
+      "key": "api_key",
+      "type": "secret"
+    },
+    {
+      "key": "sender_email",
+      "type": "string"
+    },
+    {
+      "key": "sender_name",
+      "type": "string"
+    },
+    {
+      "key": "subject_prefix",
+      "type": "string"
+    },
+    {
+      "key": "sms_sender",
+      "type": "string"
+    },
+    {
+      "key": "country_code",
+      "type": "string"
+    },
+    {
+      "key": "low_credits_threshold",
+      "type": "number"
+    },
+    {
+      "key": "follow_deliveries",
+      "type": "boolean"
+    }
+  ],
+  "contact_schema": [
+    {
+      "key": "channel",
+      "type": "select"
+    },
+    {
+      "key": "email",
+      "type": "string"
+    },
+    {
+      "key": "phone_number",
+      "type": "string"
+    }
+  ],
+  "contact_channels": ["email", "sms", "both"],
+  "actions": ["test_connection", "send_test"],
+  "scene_triggers": [
+    {
+      "key": "message_not_sent",
+      "fields": [
+        {
+          "key": "channel",
+          "type": "select",
+          "options": ["email", "sms"]
+        },
+        {
+          "key": "reason",
+          "type": "multi_select",
+          "options": [
+            "not_enough_credits",
+            "access_denied",
+            "ip_not_authorized",
+            "account_restricted",
+            "not_configured",
+            "no_sender",
+            "invalid_sender",
+            "invalid_recipient",
+            "rejected",
+            "rate_limited",
+            "server_error",
+            "timeout",
+            "unreachable",
+            "unexpected"
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "channel",
+          "type": "string"
+        },
+        {
+          "key": "reason",
+          "type": "string"
+        },
+        {
+          "key": "status",
+          "type": "number"
+        },
+        {
+          "key": "error",
+          "type": "string"
+        },
+        {
+          "key": "recipient",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "key": "delivery_failed",
+      "fields": [
+        {
+          "key": "channel",
+          "type": "select",
+          "options": ["email", "sms"]
+        },
+        {
+          "key": "event",
+          "type": "multi_select",
+          "options": [
+            "hard_bounce",
+            "soft_bounce",
+            "blocked",
+            "invalid",
+            "spam",
+            "error",
+            "rejected",
+            "skipped"
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "channel",
+          "type": "string"
+        },
+        {
+          "key": "event",
+          "type": "string"
+        },
+        {
+          "key": "recipient",
+          "type": "string"
+        },
+        {
+          "key": "subject",
+          "type": "string"
+        },
+        {
+          "key": "reason",
+          "type": "string"
+        },
+        {
+          "key": "message_id",
+          "type": "string"
+        },
+        {
+          "key": "sent_at",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "key": "credits_low",
+      "fields": [],
+      "variables": [
+        {
+          "key": "credits_left",
+          "type": "number"
+        },
+        {
+          "key": "threshold",
+          "type": "number"
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "send_email",
+      "fields": ["to", "subject", "message"],
+      "outputs": [
+        {
+          "key": "sent_count",
+          "type": "number"
+        },
+        {
+          "key": "invalid_addresses",
+          "type": "string"
+        },
+        {
+          "key": "message_id",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "key": "send_sms",
+      "fields": ["phone_numbers", "message"],
+      "outputs": [
+        {
+          "key": "sent_count",
+          "type": "number"
+        },
+        {
+          "key": "invalid_numbers",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "key": "get_account",
+      "fields": [],
+      "outputs": [
+        {
+          "key": "email_credits",
+          "type": "number"
+        },
+        {
+          "key": "sms_credits",
+          "type": "number"
+        },
+        {
+          "key": "plan",
+          "type": "string"
+        },
+        {
+          "key": "emails_today",
+          "type": "number"
+        },
+        {
+          "key": "sms_today",
+          "type": "number"
+        },
+        {
+          "key": "emails_this_month",
+          "type": "number"
+        },
+        {
+          "key": "sms_this_month",
+          "type": "number"
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "key": "account",
+      "settings": []
+    },
+    {
+      "key": "activity",
+      "settings": []
+    }
+  ]
+}

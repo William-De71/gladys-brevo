@@ -1,0 +1,1317 @@
+{
+  "manifest_version": 1,
+  "type": "communication",
+  "name": "Brevo",
+  "description": {
+    "en": "Gladys notifications by email and SMS through Brevo, with delivery tracking, scenes and widgets.",
+    "fr": "Notifications Gladys par e-mail et SMS via Brevo, avec suivi de remise, scènes et widgets.",
+    "de": "Gladys-Benachrichtigungen per E-Mail und SMS über Brevo, mit Zustellstatus, Szenen und Widgets.",
+    "es": "Notificaciones de Gladys por email y SMS con Brevo, con seguimiento de entrega, escenas y widgets."
+  },
+  "version": "0.1.0",
+  "docker_image": "ghcr.io/william-de71/gladys-brevo:0.1.0",
+  "gladys_version": ">=5.1.0",
+  "categories": ["notifications"],
+  "transports": ["cloud"],
+  "cover_image": "https://raw.githubusercontent.com/William-De71/gladys-brevo/main/cover.jpg",
+  "messaging": {
+    "receive": false
+  },
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "Brevo API key",
+        "fr": "Clé API Brevo",
+        "de": "Brevo-API-Schlüssel",
+        "es": "Clave API de Brevo"
+      },
+      "description": {
+        "en": "You need a Brevo account (the free plan sends 300 emails a day; SMS are bought as credits). In Brevo, open SMTP & API, API keys tab, and generate a key: it starts with xkeysib- and is shown only once. Brevo blocks API calls from unknown IP addresses (on by default on recent accounts): authorize the public IP address of your house in Security, Authorized IPs, or the calls are refused.",
+        "fr": "Il vous faut un compte Brevo (l’offre gratuite envoie 300 e-mails par jour ; les SMS s’achètent en crédits). Dans Brevo, ouvrez SMTP et API, onglet Clés API, et générez une clé : elle commence par xkeysib- et ne s’affiche qu’une fois. Brevo bloque les appels d’API venant d’adresses IP inconnues (actif par défaut sur les comptes récents) : autorisez l’adresse IP publique de votre maison dans Sécurité, IP autorisées, sinon les appels sont refusés.",
+        "de": "Sie brauchen ein Brevo-Konto (der kostenlose Tarif sendet 300 E-Mails pro Tag; SMS werden als Guthaben gekauft). Öffnen Sie in Brevo SMTP & API, Reiter API-Schlüssel, und erzeugen Sie einen Schlüssel: Er beginnt mit xkeysib- und wird nur einmal angezeigt. Brevo blockiert API-Aufrufe von unbekannten IP-Adressen (bei neueren Konten standardmäßig aktiv): Erlauben Sie die öffentliche IP-Adresse Ihres Hauses unter Sicherheit, Autorisierte IPs, sonst werden die Aufrufe abgelehnt.",
+        "es": "Necesita una cuenta de Brevo (el plan gratuito envía 300 emails al día; los SMS se compran como créditos). En Brevo, abra SMTP y API, pestaña Claves API, y genere una clave: empieza por xkeysib- y solo se muestra una vez. Brevo bloquea las llamadas a la API desde direcciones IP desconocidas (activo por defecto en las cuentas recientes): autorice la dirección IP pública de su casa en Seguridad, IP autorizadas, o las llamadas serán rechazadas."
+      },
+      "links": [
+        {
+          "url": "https://app.brevo.com/settings/keys/api",
+          "label": {
+            "en": "Create an API key",
+            "fr": "Créer une clé API",
+            "de": "API-Schlüssel erstellen",
+            "es": "Crear una clave API"
+          }
+        },
+        {
+          "url": "https://app.brevo.com/security/authorised_ips",
+          "label": {
+            "en": "Authorized IPs",
+            "fr": "IP autorisées",
+            "de": "Autorisierte IPs",
+            "es": "IP autorizadas"
+          }
+        },
+        {
+          "url": "https://help.brevo.com/hc/en-us/articles/5740111683858",
+          "label": {
+            "en": "Help: authorized IPs",
+            "fr": "Aide : IP autorisées",
+            "de": "Hilfe: autorisierte IPs",
+            "es": "Ayuda: IP autorizadas"
+          }
+        },
+        {
+          "url": "https://onboarding.brevo.com/account/register",
+          "label": {
+            "en": "Create a Brevo account",
+            "fr": "Créer un compte Brevo",
+            "de": "Brevo-Konto erstellen",
+            "es": "Crear una cuenta de Brevo"
+          }
+        }
+      ]
+    },
+    {
+      "key": "api_key",
+      "type": "secret",
+      "label": {
+        "en": "API key",
+        "fr": "Clé API",
+        "de": "API-Schlüssel",
+        "es": "Clave API"
+      },
+      "description": {
+        "en": "Starts with xkeysib-. Stored encrypted and never shown again.",
+        "fr": "Commence par xkeysib-. Stockée chiffrée et jamais réaffichée.",
+        "de": "Beginnt mit xkeysib-. Verschlüsselt gespeichert und nie wieder angezeigt.",
+        "es": "Empieza por xkeysib-. Se guarda cifrada y no se vuelve a mostrar."
+      },
+      "required": true
+    },
+    {
+      "key": "email_intro",
+      "type": "section",
+      "label": {
+        "en": "Emails",
+        "fr": "E-mails",
+        "de": "E-Mails",
+        "es": "Emails"
+      },
+      "description": {
+        "en": "Emails leave from a sender of your Brevo account: an address you verified, or any address of a domain you authenticated (Senders, domains, IPs). Leave the address empty to use the first active sender. The subject is the prefix followed by the first line of the notification.",
+        "fr": "Les e-mails partent d’un expéditeur de votre compte Brevo : une adresse vérifiée, ou toute adresse d’un domaine authentifié (Expéditeurs, domaines, IP dédiées). Laissez l’adresse vide pour prendre le premier expéditeur actif. L’objet est le préfixe suivi de la première ligne de la notification.",
+        "de": "E-Mails gehen von einem Absender Ihres Brevo-Kontos aus: einer bestätigten Adresse oder einer beliebigen Adresse einer authentifizierten Domain (Absender, Domains, IPs). Lassen Sie die Adresse leer, um den ersten aktiven Absender zu nehmen. Der Betreff ist das Präfix, gefolgt von der ersten Zeile der Benachrichtigung.",
+        "es": "Los emails salen de un remitente de su cuenta de Brevo: una dirección verificada, o cualquier dirección de un dominio autenticado (Remitentes, dominios, IP). Deje la dirección vacía para usar el primer remitente activo. El asunto es el prefijo seguido de la primera línea de la notificación."
+      }
+    },
+    {
+      "key": "sender_email",
+      "type": "string",
+      "label": {
+        "en": "Sender address",
+        "fr": "Adresse d’expédition",
+        "de": "Absenderadresse",
+        "es": "Dirección del remitente"
+      },
+      "description": {
+        "en": "Optional. A verified sender, e.g. gladys@my-domain.com.",
+        "fr": "Facultatif. Un expéditeur vérifié, par exemple gladys@mon-domaine.fr.",
+        "de": "Optional. Ein bestätigter Absender, z. B. gladys@meine-domain.de.",
+        "es": "Opcional. Un remitente verificado, por ejemplo gladys@mi-dominio.es."
+      },
+      "placeholder": {
+        "en": "gladys@my-domain.com",
+        "fr": "gladys@mon-domaine.fr",
+        "de": "gladys@meine-domain.de",
+        "es": "gladys@mi-dominio.es"
+      }
+    },
+    {
+      "key": "sender_name",
+      "type": "string",
+      "label": {
+        "en": "Sender name",
+        "fr": "Nom de l’expéditeur",
+        "de": "Absendername",
+        "es": "Nombre del remitente"
+      },
+      "description": {
+        "en": "The name the recipients see.",
+        "fr": "Le nom que voient les destinataires.",
+        "de": "Der Name, den die Empfänger sehen.",
+        "es": "El nombre que ven los destinatarios."
+      },
+      "default": "Gladys"
+    },
+    {
+      "key": "subject_prefix",
+      "type": "string",
+      "label": {
+        "en": "Subject prefix",
+        "fr": "Préfixe de l’objet",
+        "de": "Betreff-Präfix",
+        "es": "Prefijo del asunto"
+      },
+      "description": {
+        "en": "Placed before the first line of the notification: \"Gladys: Front door open\".",
+        "fr": "Placé avant la première ligne de la notification : « Gladys: Porte d’entrée ouverte ».",
+        "de": "Steht vor der ersten Zeile der Benachrichtigung: „Gladys: Haustür offen“.",
+        "es": "Se coloca antes de la primera línea de la notificación: «Gladys: Puerta abierta»."
+      },
+      "default": "Gladys"
+    },
+    {
+      "key": "sms_intro",
+      "type": "section",
+      "label": {
+        "en": "SMS",
+        "fr": "SMS",
+        "de": "SMS",
+        "es": "SMS"
+      },
+      "description": {
+        "en": "SMS use the credits bought in Brevo (none on a new account). The sender is a name of up to 11 letters and digits, without spaces; some countries replace it with a number. A text of more than 160 characters (70 with accents such as ê or emojis) is sent in several parts, each one using credits.",
+        "fr": "Les SMS consomment les crédits achetés dans Brevo (aucun sur un compte neuf). L’expéditeur est un nom de 11 lettres et chiffres au plus, sans espace ; certains pays le remplacent par un numéro. Un texte de plus de 160 caractères (70 avec des accents comme ê ou des emojis) part en plusieurs morceaux, chacun consommant des crédits.",
+        "de": "SMS verbrauchen das in Brevo gekaufte Guthaben (bei einem neuen Konto keines). Der Absender ist ein Name aus höchstens 11 Buchstaben und Ziffern, ohne Leerzeichen; manche Länder ersetzen ihn durch eine Nummer. Ein Text über 160 Zeichen (70 mit Sonderzeichen wie ê oder Emojis) wird in mehreren Teilen gesendet, jeder verbraucht Guthaben.",
+        "es": "Los SMS consumen los créditos comprados en Brevo (ninguno en una cuenta nueva). El remitente es un nombre de hasta 11 letras y cifras, sin espacios; algunos países lo sustituyen por un número. Un texto de más de 160 caracteres (70 con acentos como ê o emojis) se envía en varias partes, y cada una consume créditos."
+      }
+    },
+    {
+      "key": "sms_sender",
+      "type": "string",
+      "label": {
+        "en": "SMS sender",
+        "fr": "Expéditeur des SMS",
+        "de": "SMS-Absender",
+        "es": "Remitente de los SMS"
+      },
+      "description": {
+        "en": "Up to 11 letters and digits, e.g. Gladys or MyHome.",
+        "fr": "11 lettres et chiffres au plus, par exemple Gladys ou MaMaison.",
+        "de": "Höchstens 11 Buchstaben und Ziffern, z. B. Gladys oder MeinHaus.",
+        "es": "Hasta 11 letras y cifras, por ejemplo Gladys o MiCasa."
+      },
+      "default": "Gladys"
+    },
+    {
+      "key": "country_code",
+      "type": "string",
+      "label": {
+        "en": "Default country code",
+        "fr": "Indicatif pays par défaut",
+        "de": "Standard-Ländervorwahl",
+        "es": "Prefijo de país por defecto"
+      },
+      "description": {
+        "en": "Added to the numbers typed without one (06 12 34 56 78 becomes +33 6 12 34 56 78). Digits only: 33 France, 32 Belgium, 41 Switzerland, 49 Germany, 34 Spain.",
+        "fr": "Ajouté aux numéros saisis sans indicatif (06 12 34 56 78 devient +33 6 12 34 56 78). Chiffres seulement : 33 France, 32 Belgique, 41 Suisse, 49 Allemagne, 34 Espagne.",
+        "de": "Wird Nummern ohne Vorwahl vorangestellt (0151 1234567 wird mit 49 zu +49 151 1234567). Nur Ziffern: 49 Deutschland, 43 Österreich, 41 Schweiz, 33 Frankreich.",
+        "es": "Se añade a los números escritos sin prefijo (612 34 56 78 no lo necesita; 06 12… pasa a +33 6 12…). Solo cifras: 34 España, 33 Francia, 32 Bélgica, 41 Suiza."
+      },
+      "default": "33"
+    },
+    {
+      "key": "options_intro",
+      "type": "section",
+      "label": {
+        "en": "Credits and delivery",
+        "fr": "Crédits et remise",
+        "de": "Guthaben und Zustellung",
+        "es": "Créditos y entrega"
+      },
+      "description": {
+        "en": "The account is read every 15 minutes. The delivery follow-up reads the events of Brevo every 5 minutes, only while a message of the last two days waits for its final status, and fires \"Delivery failed\" when one did not arrive.",
+        "fr": "Le compte est lu toutes les 15 minutes. Le suivi de remise lit les événements de Brevo toutes les 5 minutes, seulement tant qu’un message des deux derniers jours attend son état final, et déclenche « Échec de remise » quand l’un d’eux n’est pas arrivé.",
+        "de": "Das Konto wird alle 15 Minuten gelesen. Die Zustellverfolgung liest die Ereignisse von Brevo alle 5 Minuten, nur solange eine Nachricht der letzten zwei Tage auf ihren endgültigen Status wartet, und löst „Zustellung fehlgeschlagen“ aus, wenn eine nicht ankam.",
+        "es": "La cuenta se lee cada 15 minutos. El seguimiento de entrega lee los eventos de Brevo cada 5 minutos, solo mientras un mensaje de los dos últimos días espera su estado final, y activa «Entrega fallida» cuando uno no llegó."
+      }
+    },
+    {
+      "key": "low_credits_threshold",
+      "type": "number",
+      "label": {
+        "en": "Low SMS credits alert",
+        "fr": "Alerte crédits SMS bas",
+        "de": "Warnung bei wenig SMS-Guthaben",
+        "es": "Alerta de pocos créditos SMS"
+      },
+      "description": {
+        "en": "Below this number of SMS credits, the \"SMS credits low\" scene trigger fires once. 0 turns it off.",
+        "fr": "Sous ce nombre de crédits SMS, le déclencheur de scène « Crédits SMS bas » se déclenche une fois. 0 le désactive.",
+        "de": "Unter dieser Zahl an SMS-Guthaben löst der Szenen-Auslöser „SMS-Guthaben niedrig“ einmal aus. 0 schaltet ihn ab.",
+        "es": "Por debajo de este número de créditos SMS, el disparador de escena «Pocos créditos SMS» se activa una vez. 0 lo desactiva."
+      },
+      "default": 20,
+      "min": 0,
+      "max": 100000
+    },
+    {
+      "key": "follow_deliveries",
+      "type": "boolean",
+      "label": {
+        "en": "Follow the delivery",
+        "fr": "Suivre la remise",
+        "de": "Zustellung verfolgen",
+        "es": "Seguir la entrega"
+      },
+      "description": {
+        "en": "Shows delivered or bounced in the widget, and fires \"Delivery failed\".",
+        "fr": "Affiche remis ou en erreur dans le widget, et déclenche « Échec de remise ».",
+        "de": "Zeigt zugestellt oder unzustellbar im Widget und löst „Zustellung fehlgeschlagen“ aus.",
+        "es": "Muestra entregado o rebotado en el widget y activa «Entrega fallida»."
+      },
+      "default": true
+    }
+  ],
+  "contact_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "Notifications by email and SMS",
+        "fr": "Notifications par e-mail et SMS",
+        "de": "Benachrichtigungen per E-Mail und SMS",
+        "es": "Notificaciones por email y SMS"
+      },
+      "description": {
+        "en": "Choose how your Gladys notifications reach you, and enter the matching address and/or number. Emails carry the camera images; SMS use credits of the Brevo account of the house.",
+        "fr": "Choisissez comment vos notifications Gladys vous parviennent, puis saisissez l’adresse et/ou le numéro correspondants. Les e-mails transportent les images des caméras ; les SMS consomment des crédits du compte Brevo de la maison.",
+        "de": "Wählen Sie, wie Ihre Gladys-Benachrichtigungen Sie erreichen, und geben Sie die passende Adresse und/oder Nummer ein. E-Mails enthalten die Kamerabilder; SMS verbrauchen Guthaben des Brevo-Kontos des Hauses.",
+        "es": "Elija cómo le llegan sus notificaciones de Gladys e introduzca la dirección y/o el número correspondientes. Los emails llevan las imágenes de las cámaras; los SMS consumen créditos de la cuenta de Brevo de la casa."
+      }
+    },
+    {
+      "key": "channel",
+      "type": "select",
+      "label": {
+        "en": "Send by",
+        "fr": "Envoyer par",
+        "de": "Senden per",
+        "es": "Enviar por"
+      },
+      "options": [
+        {
+          "value": "email",
+          "label": {
+            "en": "Email",
+            "fr": "E-mail",
+            "de": "E-Mail",
+            "es": "Email"
+          }
+        },
+        {
+          "value": "sms",
+          "label": {
+            "en": "SMS",
+            "fr": "SMS",
+            "de": "SMS",
+            "es": "SMS"
+          }
+        },
+        {
+          "value": "both",
+          "label": {
+            "en": "Email and SMS",
+            "fr": "E-mail et SMS",
+            "de": "E-Mail und SMS",
+            "es": "Email y SMS"
+          }
+        }
+      ],
+      "default": "email",
+      "required": true
+    },
+    {
+      "key": "email",
+      "type": "string",
+      "label": {
+        "en": "Email address",
+        "fr": "Adresse e-mail",
+        "de": "E-Mail-Adresse",
+        "es": "Dirección de email"
+      },
+      "description": {
+        "en": "Needed for Email and for Email and SMS.",
+        "fr": "Nécessaire pour E-mail et pour E-mail et SMS.",
+        "de": "Nötig für E-Mail sowie E-Mail und SMS.",
+        "es": "Necesaria para Email y para Email y SMS."
+      },
+      "placeholder": {
+        "en": "you@example.com",
+        "fr": "vous@exemple.fr",
+        "de": "sie@beispiel.de",
+        "es": "usted@ejemplo.es"
+      }
+    },
+    {
+      "key": "phone_number",
+      "type": "string",
+      "label": {
+        "en": "Mobile number",
+        "fr": "Numéro de mobile",
+        "de": "Handynummer",
+        "es": "Número de móvil"
+      },
+      "description": {
+        "en": "Needed for SMS. Preferably with the country code, e.g. +33612345678.",
+        "fr": "Nécessaire pour les SMS. De préférence avec l’indicatif, par exemple +33612345678.",
+        "de": "Nötig für SMS. Am besten mit Ländervorwahl, z. B. +4915112345678.",
+        "es": "Necesario para los SMS. Preferiblemente con el prefijo, por ejemplo +34612345678."
+      },
+      "placeholder": {
+        "en": "+33612345678",
+        "fr": "+33612345678",
+        "de": "+4915112345678",
+        "es": "+34612345678"
+      }
+    }
+  ],
+  "actions": [
+    {
+      "key": "test_connection",
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
+      },
+      "description": {
+        "en": "Reads the Brevo account: credits, senders and the one used.",
+        "fr": "Lit le compte Brevo : crédits, expéditeurs et celui utilisé.",
+        "de": "Liest das Brevo-Konto: Guthaben, Absender und den verwendeten.",
+        "es": "Lee la cuenta de Brevo: créditos, remitentes y el que se usa."
+      },
+      "timeout_seconds": 30
+    },
+    {
+      "key": "send_test",
+      "label": {
+        "en": "Send a test",
+        "fr": "Envoyer un test",
+        "de": "Test senden",
+        "es": "Enviar una prueba"
+      },
+      "description": {
+        "en": "Sends a test email and/or SMS to what you enter below. An SMS uses credits.",
+        "fr": "Envoie un e-mail et/ou un SMS de test à ce que vous saisissez ci-dessous. Un SMS consomme des crédits.",
+        "de": "Sendet eine Test-E-Mail und/oder -SMS an die Angaben unten. Eine SMS verbraucht Guthaben.",
+        "es": "Envía un email y/o un SMS de prueba a lo que indique abajo. Un SMS consume créditos."
+      },
+      "timeout_seconds": 60,
+      "fields": [
+        {
+          "key": "email",
+          "type": "string",
+          "label": {
+            "en": "Email address",
+            "fr": "Adresse e-mail",
+            "de": "E-Mail-Adresse",
+            "es": "Dirección de email"
+          },
+          "placeholder": {
+            "en": "you@example.com",
+            "fr": "vous@exemple.fr",
+            "de": "sie@beispiel.de",
+            "es": "usted@ejemplo.es"
+          }
+        },
+        {
+          "key": "phone_number",
+          "type": "string",
+          "label": {
+            "en": "Mobile number",
+            "fr": "Numéro de mobile",
+            "de": "Handynummer",
+            "es": "Número de móvil"
+          },
+          "placeholder": {
+            "en": "+33612345678",
+            "fr": "+33612345678",
+            "de": "+4915112345678",
+            "es": "+34612345678"
+          }
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "key": "account",
+      "label": {
+        "en": "Brevo",
+        "fr": "Brevo",
+        "de": "Brevo",
+        "es": "Brevo"
+      },
+      "description": {
+        "en": "Email and SMS credits, messages sent today and this month, sender, failures.",
+        "fr": "Crédits e-mail et SMS, messages envoyés aujourd’hui et ce mois-ci, expéditeur, échecs.",
+        "de": "E-Mail- und SMS-Guthaben, heute und diesen Monat gesendete Nachrichten, Absender, Fehler.",
+        "es": "Créditos de email y SMS, mensajes enviados hoy y este mes, remitente, fallos."
+      },
+      "icon": "send"
+    },
+    {
+      "key": "activity",
+      "label": {
+        "en": "Brevo messages",
+        "fr": "Messages Brevo",
+        "de": "Brevo-Nachrichten",
+        "es": "Mensajes de Brevo"
+      },
+      "description": {
+        "en": "Last emails and SMS sent by Gladys, with their delivery status; tap one for details.",
+        "fr": "Derniers e-mails et SMS envoyés par Gladys, avec leur état de remise ; touchez pour le détail.",
+        "de": "Letzte von Gladys gesendete E-Mails und SMS mit Zustellstatus; antippen für Details.",
+        "es": "Últimos emails y SMS enviados por Gladys, con su estado de entrega; toque uno para el detalle."
+      },
+      "icon": "list"
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "message_not_sent",
+      "label": {
+        "en": "Message not sent",
+        "fr": "Message non envoyé",
+        "de": "Nachricht nicht gesendet",
+        "es": "Mensaje no enviado"
+      },
+      "description": {
+        "en": "Brevo did not accept a Gladys notification. Fires on the first failure of a channel, then again only after a message of that channel went through: a scene that warns you through the other channel cannot loop.",
+        "fr": "Brevo n’a pas accepté une notification Gladys. Se déclenche au premier échec d’un canal, puis seulement après qu’un message de ce canal est passé : une scène qui vous prévient par l’autre canal ne peut pas boucler.",
+        "de": "Brevo hat eine Gladys-Benachrichtigung nicht angenommen. Löst beim ersten Fehler eines Kanals aus, dann erst wieder, nachdem eine Nachricht dieses Kanals durchging: Eine Szene, die Sie über den anderen Kanal warnt, kann nicht in einer Schleife laufen.",
+        "es": "Brevo no aceptó una notificación de Gladys. Se activa con el primer fallo de un canal y de nuevo solo después de que pase un mensaje de ese canal: una escena que le avisa por el otro canal no puede entrar en bucle."
+      },
+      "fields": [
+        {
+          "key": "channel",
+          "type": "select",
+          "label": {
+            "en": "Channel",
+            "fr": "Canal",
+            "de": "Kanal",
+            "es": "Canal"
+          },
+          "description": {
+            "en": "Empty: both.",
+            "fr": "Vide : les deux.",
+            "de": "Leer: beide.",
+            "es": "Vacío: ambos."
+          },
+          "options": [
+            {
+              "value": "email",
+              "label": {
+                "en": "Email",
+                "fr": "E-mail",
+                "de": "E-Mail",
+                "es": "Email"
+              }
+            },
+            {
+              "value": "sms",
+              "label": {
+                "en": "SMS",
+                "fr": "SMS",
+                "de": "SMS",
+                "es": "SMS"
+              }
+            }
+          ]
+        },
+        {
+          "key": "reason",
+          "type": "multi_select",
+          "label": {
+            "en": "Reasons",
+            "fr": "Raisons",
+            "de": "Gründe",
+            "es": "Motivos"
+          },
+          "description": {
+            "en": "Leave empty to react to every reason.",
+            "fr": "Laissez vide pour réagir à toutes les raisons.",
+            "de": "Leer lassen, um auf jeden Grund zu reagieren.",
+            "es": "Déjelo vacío para reaccionar a todos los motivos."
+          },
+          "options": [
+            {
+              "value": "not_enough_credits",
+              "label": {
+                "en": "Not enough credits",
+                "fr": "Crédits insuffisants",
+                "de": "Nicht genug Guthaben",
+                "es": "Créditos insuficientes"
+              }
+            },
+            {
+              "value": "access_denied",
+              "label": {
+                "en": "API key refused",
+                "fr": "Clé API refusée",
+                "de": "API-Schlüssel abgelehnt",
+                "es": "Clave API rechazada"
+              }
+            },
+            {
+              "value": "ip_not_authorized",
+              "label": {
+                "en": "IP address not authorized by Brevo",
+                "fr": "Adresse IP non autorisée par Brevo",
+                "de": "IP-Adresse von Brevo nicht erlaubt",
+                "es": "Dirección IP no autorizada por Brevo"
+              }
+            },
+            {
+              "value": "account_restricted",
+              "label": {
+                "en": "Account not allowed to send (validation, activation)",
+                "fr": "Compte pas autorisé à envoyer (validation, activation)",
+                "de": "Konto darf nicht senden (Prüfung, Aktivierung)",
+                "es": "Cuenta sin permiso de envío (validación, activación)"
+              }
+            },
+            {
+              "value": "not_configured",
+              "label": {
+                "en": "API key missing in the configuration",
+                "fr": "Clé API manquante dans la configuration",
+                "de": "API-Schlüssel fehlt in der Konfiguration",
+                "es": "Falta la clave API en la configuración"
+              }
+            },
+            {
+              "value": "no_sender",
+              "label": {
+                "en": "No active email sender",
+                "fr": "Aucun expéditeur e-mail actif",
+                "de": "Kein aktiver E-Mail-Absender",
+                "es": "Ningún remitente de email activo"
+              }
+            },
+            {
+              "value": "invalid_sender",
+              "label": {
+                "en": "Sender refused",
+                "fr": "Expéditeur refusé",
+                "de": "Absender abgelehnt",
+                "es": "Remitente rechazado"
+              }
+            },
+            {
+              "value": "invalid_recipient",
+              "label": {
+                "en": "Address or number missing or refused",
+                "fr": "Adresse ou numéro manquant ou refusé",
+                "de": "Adresse oder Nummer fehlt oder abgelehnt",
+                "es": "Dirección o número ausente o rechazado"
+              }
+            },
+            {
+              "value": "rejected",
+              "label": {
+                "en": "Message refused by Brevo",
+                "fr": "Message refusé par Brevo",
+                "de": "Nachricht von Brevo abgelehnt",
+                "es": "Mensaje rechazado por Brevo"
+              }
+            },
+            {
+              "value": "rate_limited",
+              "label": {
+                "en": "Too many calls in a short time",
+                "fr": "Trop d’appels en peu de temps",
+                "de": "Zu viele Aufrufe in kurzer Zeit",
+                "es": "Demasiadas llamadas en poco tiempo"
+              }
+            },
+            {
+              "value": "server_error",
+              "label": {
+                "en": "Brevo server error",
+                "fr": "Erreur du serveur Brevo",
+                "de": "Brevo-Serverfehler",
+                "es": "Error del servidor de Brevo"
+              }
+            },
+            {
+              "value": "timeout",
+              "label": {
+                "en": "No answer in time (the message may still arrive)",
+                "fr": "Pas de réponse à temps (le message peut quand même arriver)",
+                "de": "Keine Antwort rechtzeitig (die Nachricht kann trotzdem ankommen)",
+                "es": "Sin respuesta a tiempo (el mensaje puede llegar igualmente)"
+              }
+            },
+            {
+              "value": "unreachable",
+              "label": {
+                "en": "Brevo unreachable (network)",
+                "fr": "Brevo injoignable (réseau)",
+                "de": "Brevo nicht erreichbar (Netzwerk)",
+                "es": "Brevo inaccesible (red)"
+              }
+            },
+            {
+              "value": "unexpected",
+              "label": {
+                "en": "Unexpected answer",
+                "fr": "Réponse inattendue",
+                "de": "Unerwartete Antwort",
+                "es": "Respuesta inesperada"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "channel",
+          "type": "string",
+          "label": {
+            "en": "Channel",
+            "fr": "Canal",
+            "de": "Kanal",
+            "es": "Canal"
+          },
+          "description": {
+            "en": "email or sms.",
+            "fr": "email ou sms.",
+            "de": "email oder sms.",
+            "es": "email o sms."
+          }
+        },
+        {
+          "key": "reason",
+          "type": "string",
+          "label": {
+            "en": "Reason (code)",
+            "fr": "Raison (code)",
+            "de": "Grund (Code)",
+            "es": "Motivo (código)"
+          },
+          "description": {
+            "en": "not_enough_credits, access_denied, ip_not_authorized, account_restricted, not_configured, no_sender, invalid_sender, invalid_recipient, rejected, rate_limited, server_error, timeout, unreachable, unexpected.",
+            "fr": "not_enough_credits, access_denied, ip_not_authorized, account_restricted, not_configured, no_sender, invalid_sender, invalid_recipient, rejected, rate_limited, server_error, timeout, unreachable, unexpected.",
+            "de": "not_enough_credits, access_denied, ip_not_authorized, account_restricted, not_configured, no_sender, invalid_sender, invalid_recipient, rejected, rate_limited, server_error, timeout, unreachable, unexpected.",
+            "es": "not_enough_credits, access_denied, ip_not_authorized, account_restricted, not_configured, no_sender, invalid_sender, invalid_recipient, rejected, rate_limited, server_error, timeout, unreachable, unexpected."
+          }
+        },
+        {
+          "key": "status",
+          "type": "number",
+          "label": {
+            "en": "HTTP status",
+            "fr": "Statut HTTP",
+            "de": "HTTP-Status",
+            "es": "Estado HTTP"
+          },
+          "description": {
+            "en": "The answer of Brevo (400, 401…), empty without an answer.",
+            "fr": "La réponse de Brevo (400, 401…), vide sans réponse.",
+            "de": "Die Antwort von Brevo (400, 401…), leer ohne Antwort.",
+            "es": "La respuesta de Brevo (400, 401…), vacía sin respuesta."
+          }
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "label": {
+            "en": "Error message",
+            "fr": "Message d’erreur",
+            "de": "Fehlermeldung",
+            "es": "Mensaje de error"
+          },
+          "description": {
+            "en": "The error in English, as in the logs.",
+            "fr": "L’erreur en anglais, comme dans les journaux.",
+            "de": "Der Fehler auf Englisch, wie in den Protokollen.",
+            "es": "El error en inglés, como en los registros."
+          }
+        },
+        {
+          "key": "recipient",
+          "type": "string",
+          "label": {
+            "en": "Recipient",
+            "fr": "Destinataire",
+            "de": "Empfänger",
+            "es": "Destinatario"
+          },
+          "description": {
+            "en": "Masked: a***@example.com or +336******78.",
+            "fr": "Masqué : a***@exemple.fr ou +336******78.",
+            "de": "Maskiert: a***@beispiel.de oder +491******78.",
+            "es": "Enmascarado: a***@ejemplo.es o +346******78."
+          }
+        }
+      ]
+    },
+    {
+      "key": "delivery_failed",
+      "label": {
+        "en": "Delivery failed",
+        "fr": "Échec de remise",
+        "de": "Zustellung fehlgeschlagen",
+        "es": "Entrega fallida"
+      },
+      "description": {
+        "en": "Brevo accepted a message of Gladys, then reported that it did not reach the recipient (bounce, block, spam report…). Once per message, a few minutes after the sending; needs \"Follow the delivery\".",
+        "fr": "Brevo a accepté un message de Gladys, puis signalé qu’il n’est pas arrivé (rejet, blocage, signalement spam…). Une fois par message, quelques minutes après l’envoi ; nécessite « Suivre la remise ».",
+        "de": "Brevo hat eine Nachricht von Gladys angenommen und dann gemeldet, dass sie nicht ankam (Bounce, Sperre, Spam-Meldung…). Einmal pro Nachricht, einige Minuten nach dem Senden; benötigt „Zustellung verfolgen“.",
+        "es": "Brevo aceptó un mensaje de Gladys y luego informó de que no llegó (rebote, bloqueo, denuncia de spam…). Una vez por mensaje, unos minutos después del envío; requiere «Seguir la entrega»."
+      },
+      "fields": [
+        {
+          "key": "channel",
+          "type": "select",
+          "label": {
+            "en": "Channel",
+            "fr": "Canal",
+            "de": "Kanal",
+            "es": "Canal"
+          },
+          "description": {
+            "en": "Empty: both.",
+            "fr": "Vide : les deux.",
+            "de": "Leer: beide.",
+            "es": "Vacío: ambos."
+          },
+          "options": [
+            {
+              "value": "email",
+              "label": {
+                "en": "Email",
+                "fr": "E-mail",
+                "de": "E-Mail",
+                "es": "Email"
+              }
+            },
+            {
+              "value": "sms",
+              "label": {
+                "en": "SMS",
+                "fr": "SMS",
+                "de": "SMS",
+                "es": "SMS"
+              }
+            }
+          ]
+        },
+        {
+          "key": "event",
+          "type": "multi_select",
+          "label": {
+            "en": "Events",
+            "fr": "Événements",
+            "de": "Ereignisse",
+            "es": "Eventos"
+          },
+          "description": {
+            "en": "Leave empty to react to every event.",
+            "fr": "Laissez vide pour réagir à tous les événements.",
+            "de": "Leer lassen, um auf jedes Ereignis zu reagieren.",
+            "es": "Déjelo vacío para reaccionar a todos los eventos."
+          },
+          "options": [
+            {
+              "value": "hard_bounce",
+              "label": {
+                "en": "Hard bounce (address or number does not exist)",
+                "fr": "Rejet définitif (adresse ou numéro inexistant)",
+                "de": "Hard Bounce (Adresse oder Nummer existiert nicht)",
+                "es": "Rebote duro (dirección o número inexistente)"
+              }
+            },
+            {
+              "value": "soft_bounce",
+              "label": {
+                "en": "Soft bounce (mailbox full, phone off…)",
+                "fr": "Rejet temporaire (boîte pleine, téléphone éteint…)",
+                "de": "Soft Bounce (Postfach voll, Telefon aus…)",
+                "es": "Rebote suave (buzón lleno, teléfono apagado…)"
+              }
+            },
+            {
+              "value": "blocked",
+              "label": {
+                "en": "Blocked by Brevo (address on a block list)",
+                "fr": "Bloqué par Brevo (adresse sur liste de blocage)",
+                "de": "Von Brevo blockiert (Adresse auf Sperrliste)",
+                "es": "Bloqueado por Brevo (dirección en lista de bloqueo)"
+              }
+            },
+            {
+              "value": "invalid",
+              "label": {
+                "en": "Invalid address",
+                "fr": "Adresse invalide",
+                "de": "Ungültige Adresse",
+                "es": "Dirección no válida"
+              }
+            },
+            {
+              "value": "spam",
+              "label": {
+                "en": "Reported as spam by the recipient",
+                "fr": "Signalé comme spam par le destinataire",
+                "de": "Vom Empfänger als Spam gemeldet",
+                "es": "Marcado como spam por el destinatario"
+              }
+            },
+            {
+              "value": "error",
+              "label": {
+                "en": "Sending error",
+                "fr": "Erreur d’envoi",
+                "de": "Sendefehler",
+                "es": "Error de envío"
+              }
+            },
+            {
+              "value": "rejected",
+              "label": {
+                "en": "SMS rejected by the operator",
+                "fr": "SMS rejeté par l’opérateur",
+                "de": "SMS vom Netzbetreiber abgelehnt",
+                "es": "SMS rechazado por el operador"
+              }
+            },
+            {
+              "value": "skipped",
+              "label": {
+                "en": "SMS skipped (number unsubscribed or blocked)",
+                "fr": "SMS ignoré (numéro désinscrit ou bloqué)",
+                "de": "SMS übersprungen (Nummer abgemeldet oder gesperrt)",
+                "es": "SMS omitido (número dado de baja o bloqueado)"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "channel",
+          "type": "string",
+          "label": {
+            "en": "Channel",
+            "fr": "Canal",
+            "de": "Kanal",
+            "es": "Canal"
+          },
+          "description": {
+            "en": "email or sms.",
+            "fr": "email ou sms.",
+            "de": "email oder sms.",
+            "es": "email o sms."
+          }
+        },
+        {
+          "key": "event",
+          "type": "string",
+          "label": {
+            "en": "Event (code)",
+            "fr": "Événement (code)",
+            "de": "Ereignis (Code)",
+            "es": "Evento (código)"
+          },
+          "description": {
+            "en": "hard_bounce, soft_bounce, blocked, invalid, spam, error, rejected, skipped.",
+            "fr": "hard_bounce, soft_bounce, blocked, invalid, spam, error, rejected, skipped.",
+            "de": "hard_bounce, soft_bounce, blocked, invalid, spam, error, rejected, skipped.",
+            "es": "hard_bounce, soft_bounce, blocked, invalid, spam, error, rejected, skipped."
+          }
+        },
+        {
+          "key": "recipient",
+          "type": "string",
+          "label": {
+            "en": "Recipient",
+            "fr": "Destinataire",
+            "de": "Empfänger",
+            "es": "Destinatario"
+          },
+          "description": {
+            "en": "Masked: a***@example.com or +336******78.",
+            "fr": "Masqué : a***@exemple.fr ou +336******78.",
+            "de": "Maskiert: a***@beispiel.de oder +491******78.",
+            "es": "Enmascarado: a***@ejemplo.es o +346******78."
+          }
+        },
+        {
+          "key": "subject",
+          "type": "string",
+          "label": {
+            "en": "Subject or text",
+            "fr": "Objet ou texte",
+            "de": "Betreff oder Text",
+            "es": "Asunto o texto"
+          },
+          "description": {
+            "en": "The subject of the email, or the text of the SMS.",
+            "fr": "L’objet de l’e-mail, ou le texte du SMS.",
+            "de": "Der Betreff der E-Mail oder der Text der SMS.",
+            "es": "El asunto del email o el texto del SMS."
+          }
+        },
+        {
+          "key": "reason",
+          "type": "string",
+          "label": {
+            "en": "Reason",
+            "fr": "Raison",
+            "de": "Grund",
+            "es": "Motivo"
+          },
+          "description": {
+            "en": "The explanation of Brevo or of the recipient's server, in English, when there is one.",
+            "fr": "L’explication de Brevo ou du serveur du destinataire, en anglais, quand il y en a une.",
+            "de": "Die Erklärung von Brevo oder vom Server des Empfängers, auf Englisch, falls vorhanden.",
+            "es": "La explicación de Brevo o del servidor del destinatario, en inglés, cuando la hay."
+          }
+        },
+        {
+          "key": "message_id",
+          "type": "string",
+          "label": {
+            "en": "Message id",
+            "fr": "Identifiant du message",
+            "de": "Nachrichten-ID",
+            "es": "Id del mensaje"
+          }
+        },
+        {
+          "key": "sent_at",
+          "type": "string",
+          "label": {
+            "en": "Sent at",
+            "fr": "Envoyé le",
+            "de": "Gesendet am",
+            "es": "Enviado el"
+          },
+          "description": {
+            "en": "ISO 8601, in UTC.",
+            "fr": "ISO 8601, en UTC.",
+            "de": "ISO 8601, in UTC.",
+            "es": "ISO 8601, en UTC."
+          }
+        }
+      ]
+    },
+    {
+      "key": "credits_low",
+      "label": {
+        "en": "SMS credits low",
+        "fr": "Crédits SMS bas",
+        "de": "SMS-Guthaben niedrig",
+        "es": "Pocos créditos SMS"
+      },
+      "description": {
+        "en": "The SMS credits of the Brevo account went below the threshold of the configuration. Fires once, then again only after the account was topped up above it.",
+        "fr": "Les crédits SMS du compte Brevo sont passés sous le seuil de la configuration. Se déclenche une fois, puis seulement après une recharge au-dessus du seuil.",
+        "de": "Das SMS-Guthaben des Brevo-Kontos fiel unter die Schwelle der Konfiguration. Löst einmal aus, dann erst wieder nach einer Aufladung über die Schwelle.",
+        "es": "Los créditos SMS de la cuenta de Brevo bajaron del umbral de la configuración. Se activa una vez y de nuevo solo tras recargar por encima del umbral."
+      },
+      "variables": [
+        {
+          "key": "credits_left",
+          "type": "number",
+          "label": {
+            "en": "Credits left",
+            "fr": "Crédits restants",
+            "de": "Restguthaben",
+            "es": "Créditos restantes"
+          }
+        },
+        {
+          "key": "threshold",
+          "type": "number",
+          "label": {
+            "en": "Threshold",
+            "fr": "Seuil",
+            "de": "Schwelle",
+            "es": "Umbral"
+          }
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "send_email",
+      "label": {
+        "en": "Send an email",
+        "fr": "Envoyer un e-mail",
+        "de": "E-Mail senden",
+        "es": "Enviar un email"
+      },
+      "description": {
+        "en": "Sends an email to any address, even someone who is not a Gladys user (a neighbor, a babysitter). Each recipient gets their own email.",
+        "fr": "Envoie un e-mail à n’importe quelle adresse, même à quelqu’un qui n’utilise pas Gladys (un voisin, une baby-sitter). Chaque destinataire reçoit son propre e-mail.",
+        "de": "Sendet eine E-Mail an eine beliebige Adresse, auch an jemanden ohne Gladys-Konto (Nachbar, Babysitter). Jeder Empfänger bekommt seine eigene E-Mail.",
+        "es": "Envía un email a cualquier dirección, incluso a alguien que no usa Gladys (un vecino, una canguro). Cada destinatario recibe su propio email."
+      },
+      "timeout_seconds": 60,
+      "fields": [
+        {
+          "key": "to",
+          "type": "string",
+          "label": {
+            "en": "Addresses",
+            "fr": "Adresses",
+            "de": "Adressen",
+            "es": "Direcciones"
+          },
+          "description": {
+            "en": "One or several addresses, separated by commas (20 at most).",
+            "fr": "Une ou plusieurs adresses, séparées par des virgules (20 au plus).",
+            "de": "Eine oder mehrere Adressen, durch Kommas getrennt (höchstens 20).",
+            "es": "Una o varias direcciones, separadas por comas (20 como máximo)."
+          },
+          "placeholder": {
+            "en": "neighbor@example.com",
+            "fr": "voisin@exemple.fr",
+            "de": "nachbar@beispiel.de",
+            "es": "vecino@ejemplo.es"
+          },
+          "required": true
+        },
+        {
+          "key": "subject",
+          "type": "string",
+          "label": {
+            "en": "Subject",
+            "fr": "Objet",
+            "de": "Betreff",
+            "es": "Asunto"
+          },
+          "description": {
+            "en": "Empty: the prefix of the configuration and the first line of the text.",
+            "fr": "Vide : le préfixe de la configuration et la première ligne du texte.",
+            "de": "Leer: das Präfix der Konfiguration und die erste Zeile des Textes.",
+            "es": "Vacío: el prefijo de la configuración y la primera línea del texto."
+          }
+        },
+        {
+          "key": "message",
+          "type": "string",
+          "label": {
+            "en": "Text",
+            "fr": "Texte",
+            "de": "Text",
+            "es": "Texto"
+          },
+          "description": {
+            "en": "Scene variables are allowed.",
+            "fr": "Les variables de scène sont permises.",
+            "de": "Szenenvariablen sind erlaubt.",
+            "es": "Se permiten variables de escena."
+          },
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "sent_count",
+          "type": "number",
+          "label": {
+            "en": "Emails sent",
+            "fr": "E-mails envoyés",
+            "de": "Gesendete E-Mails",
+            "es": "Emails enviados"
+          }
+        },
+        {
+          "key": "invalid_addresses",
+          "type": "string",
+          "label": {
+            "en": "Addresses refused",
+            "fr": "Adresses refusées",
+            "de": "Abgelehnte Adressen",
+            "es": "Direcciones rechazadas"
+          }
+        },
+        {
+          "key": "message_id",
+          "type": "string",
+          "label": {
+            "en": "Message id",
+            "fr": "Identifiant du message",
+            "de": "Nachrichten-ID",
+            "es": "Id del mensaje"
+          }
+        }
+      ]
+    },
+    {
+      "key": "send_sms",
+      "label": {
+        "en": "Send an SMS",
+        "fr": "Envoyer un SMS",
+        "de": "SMS senden",
+        "es": "Enviar un SMS"
+      },
+      "description": {
+        "en": "Sends an SMS to any number, even someone who is not a Gladys user. Uses credits.",
+        "fr": "Envoie un SMS à n’importe quel numéro, même à quelqu’un qui n’utilise pas Gladys. Consomme des crédits.",
+        "de": "Sendet eine SMS an eine beliebige Nummer, auch an jemanden ohne Gladys-Konto. Verbraucht Guthaben.",
+        "es": "Envía un SMS a cualquier número, incluso a alguien que no usa Gladys. Consume créditos."
+      },
+      "timeout_seconds": 60,
+      "fields": [
+        {
+          "key": "phone_numbers",
+          "type": "string",
+          "label": {
+            "en": "Phone numbers",
+            "fr": "Numéros de téléphone",
+            "de": "Telefonnummern",
+            "es": "Números de teléfono"
+          },
+          "description": {
+            "en": "One or several numbers, separated by commas (20 at most).",
+            "fr": "Un ou plusieurs numéros, séparés par des virgules (20 au plus).",
+            "de": "Eine oder mehrere Nummern, durch Kommas getrennt (höchstens 20).",
+            "es": "Uno o varios números, separados por comas (20 como máximo)."
+          },
+          "placeholder": {
+            "en": "+33612345678, +33698765432",
+            "fr": "+33612345678, +33698765432",
+            "de": "+4915112345678, +4917612345678",
+            "es": "+34612345678, +34698765432"
+          },
+          "required": true
+        },
+        {
+          "key": "message",
+          "type": "string",
+          "label": {
+            "en": "Text",
+            "fr": "Texte",
+            "de": "Text",
+            "es": "Texto"
+          },
+          "description": {
+            "en": "Scene variables are allowed. A long text is sent in several parts, each one using credits.",
+            "fr": "Les variables de scène sont permises. Un texte long part en plusieurs morceaux, chacun consommant des crédits.",
+            "de": "Szenenvariablen sind erlaubt. Ein langer Text wird in mehreren Teilen gesendet, jeder verbraucht Guthaben.",
+            "es": "Se permiten variables de escena. Un texto largo se envía en varias partes, y cada una consume créditos."
+          },
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "sent_count",
+          "type": "number",
+          "label": {
+            "en": "SMS sent",
+            "fr": "SMS envoyés",
+            "de": "Gesendete SMS",
+            "es": "SMS enviados"
+          }
+        },
+        {
+          "key": "invalid_numbers",
+          "type": "string",
+          "label": {
+            "en": "Numbers refused",
+            "fr": "Numéros refusés",
+            "de": "Abgelehnte Nummern",
+            "es": "Números rechazados"
+          }
+        }
+      ]
+    },
+    {
+      "key": "get_account",
+      "label": {
+        "en": "Read the Brevo account",
+        "fr": "Lire le compte Brevo",
+        "de": "Brevo-Konto lesen",
+        "es": "Leer la cuenta de Brevo"
+      },
+      "description": {
+        "en": "Credits left and messages sent by Gladys, for a report or a condition.",
+        "fr": "Crédits restants et messages envoyés par Gladys, pour un rapport ou une condition.",
+        "de": "Restguthaben und von Gladys gesendete Nachrichten, für einen Bericht oder eine Bedingung.",
+        "es": "Créditos restantes y mensajes enviados por Gladys, para un informe o una condición."
+      },
+      "timeout_seconds": 30,
+      "outputs": [
+        {
+          "key": "email_credits",
+          "type": "number",
+          "label": {
+            "en": "Emails left",
+            "fr": "E-mails restants",
+            "de": "Verbleibende E-Mails",
+            "es": "Emails restantes"
+          }
+        },
+        {
+          "key": "sms_credits",
+          "type": "number",
+          "label": {
+            "en": "SMS credits",
+            "fr": "Crédits SMS",
+            "de": "SMS-Guthaben",
+            "es": "Créditos SMS"
+          }
+        },
+        {
+          "key": "plan",
+          "type": "string",
+          "label": {
+            "en": "Plan",
+            "fr": "Offre",
+            "de": "Tarif",
+            "es": "Plan"
+          }
+        },
+        {
+          "key": "emails_today",
+          "type": "number",
+          "label": {
+            "en": "Emails sent today",
+            "fr": "E-mails envoyés aujourd’hui",
+            "de": "Heute gesendete E-Mails",
+            "es": "Emails enviados hoy"
+          }
+        },
+        {
+          "key": "sms_today",
+          "type": "number",
+          "label": {
+            "en": "SMS sent today",
+            "fr": "SMS envoyés aujourd’hui",
+            "de": "Heute gesendete SMS",
+            "es": "SMS enviados hoy"
+          }
+        },
+        {
+          "key": "emails_this_month",
+          "type": "number",
+          "label": {
+            "en": "Emails sent this month",
+            "fr": "E-mails envoyés ce mois-ci",
+            "de": "Diesen Monat gesendete E-Mails",
+            "es": "Emails enviados este mes"
+          }
+        },
+        {
+          "key": "sms_this_month",
+          "type": "number",
+          "label": {
+            "en": "SMS sent this month",
+            "fr": "SMS envoyés ce mois-ci",
+            "de": "Diesen Monat gesendete SMS",
+            "es": "SMS enviados este mes"
+          }
+        }
+      ]
+    }
+  ]
+}
